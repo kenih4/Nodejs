@@ -1,2 +1,3 @@
 >本シフトの運転状況<
- BL1: ForbesG  140 eV/60Hz（大和田）
+ BL2: BL-study 10.5keV/30Hz（Frog、富樫） 
+ BL3: 米倉G  15keV/30Hz（大和田、姜、登野）

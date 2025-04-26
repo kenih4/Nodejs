@@ -195,7 +195,7 @@ if(process.argv[2]=="SCSS"){
 			BL2sum += " -> " + BL2.summary + BL2T.summary;
 		}
 		BL2sum = " BL2: " + BL2sum;
-		console.log(BL2sum);
+		//console.log(BL2sum);
 
     BL3.summary = await Promise.all([Get_summary(BL3.url,1000,sta)]);
 		BL3T.summary = await Promise.all([Get_summary(BL3T.url,1000,sta)]);
@@ -208,9 +208,10 @@ if(process.argv[2]=="SCSS"){
 			BL3sum += " -> " + BL3.summary + BL3T.summary;
 		}
 		BL3sum = " BL3: " + BL3sum;
-		console.log(BL3.summary + BL3T.summary);
-		console.log(BL3sum);
+		//console.log(BL3.summary + BL3T.summary);
+		//console.log(BL3sum);
 		var out = out + BL2sum + " \r\n" + BL3sum;
+		console.log(out);
 }
 
 
