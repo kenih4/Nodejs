@@ -8,11 +8,13 @@ npm install -g  puppeteer
 npm install -g csv --save
 npm install -g babel-cli
 npm install -g @babel/preset-env	// 以下は古い　npm install -g babel-preset-env
-npm install node-ical --prefix c:/module_of_Nodejs   icalが脆弱性のためnode-icalに変更　また、ライブラリなので、c:/module_of_Nodejs　に入れるようにした
-npm install -g dateformat
-npm install -g date-utils
+npm install node-ical --prefix c:/module_of_Nodejs   		//icalが脆弱性のためnode-icalに変更　また、ライブラリなので、c:/module_of_Nodejs　に入れるようにした
+npm install dateformat --prefix c:/module_of_Nodejs
+npm install date-utils --prefix c:/module_of_Nodejs
 npm install -g clipboard-copy
 .babelrc
+
+ npm list --depth=0   でインストールしたモジュールの確認
 
 
 nexeでコンパイル時、icalで引っかかるためnpm i -g bowser、util-deprecate、isarray、inherits、core-util-is等しないといけない
@@ -34,7 +36,7 @@ CLIツール系（例: nodemon）		npm install -g					コマンドラインで�
 */
 
 const parser = require('C:\\module_of_Nodejs\\node_modules\\node-ical');//旧　const parser = require('ical');
-//const dateformat = require('dateformat');
+const dateformat = require('C:\\module_of_Nodejs\\node_modules\\dateformat');
 const fs = require('fs');	//ES6	import * as fs from "fs";
 //const {csvParseSync} = require('csv-parse/sync'); //古いconst csvParseSync = require('csv-parse/lib/sync');	//ES6	import csvParseSync from "csv-parse/lib/sync";
 //const puppeteer = require('puppeteer');
@@ -162,6 +164,7 @@ OPRADMIN.url = "http://calsrv01.spring8.or.jp/davical/public.php/plan/officer?ti
 console.log("-------------------------------------------------");
 
 if(process.argv[2]=="SCSS"){
+		console.log(BL1.url);
 		BL1.summary = await Promise.all([Get_summary(BL1.url,1000,sta)]);
 		BL1T.summary = await Promise.all([Get_summary(BL1T.url,1000,sta)]);
 		if((BL1.summary + BL1T.summary) == "") BL1.summary = "None"
@@ -169,13 +172,14 @@ if(process.argv[2]=="SCSS"){
 		BL1.summary = await Promise.all([Get_summary(BL1.url,1000,sto)]);
 		BL1T.summary = await Promise.all([Get_summary(BL1T.url,1000,sto)]);
 		if((BL1.summary + BL1T.summary) == "") BL1.summary = "None"
-				console.log(BL1.summary + BL1T.summary);
+			console.log(BL1.summary + BL1T.summary);
 		if(BL1sum != (BL1.summary + BL1T.summary)){
 			BL1sum += " -> " + BL1.summary + BL1T.summary;
 		}
 		BL1sum = " BL1: " + BL1sum;
-				console.log(BL1sum);
+		console.log("BL1sum:	" + BL1sum);
 		var out = out + BL1sum;
+		console.log("out:	" + out);
 
 }else if(process.argv[2]=="SACLA"){
 
@@ -221,20 +225,33 @@ if(process.argv[2]=="SCSS"){
 
 
 
-
-
-//		Get Summary from ical--------------------------------------------
+// Get Summary from ical--------------------------------------------
 async function Get_summary(passVal, msec, setdate) {
 	return new Promise(resolve => {
 	  setTimeout(async () => {
 		try {
-		  const data = await parser.parseFile(passVal); // ← コールバックではなく Promise    node-ical はコールバック形式ではなく、Promise形式
+
+
+
+
+var savepath = "tmp.ical"
+await deleteFile(savepath);  // 削除完了を待つ
+console.log('A	次の処理へ進みます');
+
+
+await downloadFile(passVal, savepath);// ダウンロード完了を待つ
+console.log('B	次の処理へ進みます');
+			const data = await parser.parseFile(savepath);// ← コールバックではなく Promise    node-ical はコールバック形式ではなく、Promise形式
+		    console.log("4	>>>>>>>>>>>>>.passVal = " +    passVal);  
+			
 		  for (const key in data) {
 			const plan = data[key];
 			const diff_sta = setdate.getTime() - plan.start;
 			const diff_end = plan.end - setdate.getTime();
 			if (diff_sta > 0 && diff_end > 0) {
-			  console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss') + "\t" + dateformat(plan.end, 'yyyy/mm/dd+HH:MM:ss') + "\t" + plan.summary);
+				console.log(plan.start);
+//				console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss'));
+//				console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss') + "\t" + dateformat(plan.end, 'yyyy/mm/dd+HH:MM:ss') + "\t" + plan.summary);
 			  return resolve(plan.summary);
 			}
 		  }
@@ -570,6 +587,30 @@ async function ave(dat) {
 }
 
 
+
+
+
+
+
+const fs_p = require('fs/promises');
+const { exit } = require('process');
+
+async function deleteFile(filepath) {
+	try {
+	  await fs_p.unlink(filepath);
+	  console.log(`${filepath} を削除しました`);
+	} catch (err) {
+	  console.error(`削除失敗: ${err.message}`);
+	}
+  }
+
+async function downloadFile(url, filename) {
+  const res = await fetch(url);
+  const data = await res.text(); // または res.arrayBuffer() や res.json()
+
+  await fs_p.writeFile(filename, data);
+  console.log(`${filename} を保存しました`);
+}
 
 
 

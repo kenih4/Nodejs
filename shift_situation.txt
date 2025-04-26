@@ -1,3 +1,2 @@
 >本シフトの運転状況<
- BL2: None 
- BL3: None
+ BL1: ForbesG  140 eV/60Hz（大和田）
