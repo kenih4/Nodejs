@@ -1,3 +1,6 @@
 .vscode
 test*
 log*
+sacla_watch_data.txt
+pen.ico
+*.xlsx

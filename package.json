@@ -1,11 +1,9 @@
 {
   "dependencies": {
-    "babel-preset-env": "^1.7.0",
+    "babel-preset-env": "^0.0.0",
     "csv": "^6.3.11",
     "date-utils": "^1.2.21",
     "dateformat": "^5.0.3",
-    "ical": "^0.8.0",
-    "node-ical": "^0.20.1",
     "puppeteer": "^24.7.2"
   }
 }
