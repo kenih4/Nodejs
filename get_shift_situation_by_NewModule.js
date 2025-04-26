@@ -223,27 +223,29 @@ if(process.argv[2]=="SCSS"){
 
 
 
-
 //		Get Summary from ical--------------------------------------------
-function Get_summary(passVal, msec, setdate) {
-	return new Promise(resolve =>
-		setTimeout(() => {
-
-            parser.parseFile(passVal, {}, function(err, data) {//parser.fromURL(passVal, {}, function(err, data) {
-			for(var plan in data) {
-			  var diff_sta = setdate.getTime() - data[plan].start;
-			  var diff_end = data[plan].end - setdate.getTime();
-			  if(diff_sta>0 && diff_end >0){
-		  	console.log(dateformat(data[plan].start, 'yyyy/mm/dd+HH:MM:ss') + "\t" + dateformat(data[plan].end, 'yyyy/mm/dd+HH:MM:ss') + "\t" + data[plan].summary);
-				  resolve(data[plan].summary);
-			  }
+async function Get_summary(passVal, msec, setdate) {
+	return new Promise(resolve => {
+	  setTimeout(async () => {
+		try {
+		  const data = await parser.parseFile(passVal); // ← コールバックではなく Promise    node-ical はコールバック形式ではなく、Promise形式
+		  for (const key in data) {
+			const plan = data[key];
+			const diff_sta = setdate.getTime() - plan.start;
+			const diff_end = plan.end - setdate.getTime();
+			if (diff_sta > 0 && diff_end > 0) {
+			  console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss') + "\t" + dateformat(plan.end, 'yyyy/mm/dd+HH:MM:ss') + "\t" + plan.summary);
+			  return resolve(plan.summary);
 			}
-			  resolve("");
-		  });
-	  }, msec)
-	)
-}
-
+		  }
+		  resolve("");
+		} catch (err) {
+		  console.error("Error parsing ical:", err);
+		  resolve("");
+		}
+	  }, msec);
+	});
+  }
 
 
 
