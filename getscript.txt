@@ -1,0 +1,8 @@
+#	"C:\Program Files (x86)\WinSCP\WinSCP.exe" /console /script="getscript.txt" /parameter "C:\me\puppeteer" "/home/xfel/xfelopr/bin/table/sacla_watch_data/sacla_watch_data.txt"
+
+
+option batch on
+open xfelopr:xfel5712@pd-susele11.spring8.or.jp
+lcd %1%
+get %2%
+exit

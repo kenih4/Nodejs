@@ -1,0 +1,28 @@
+﻿
+
+
+importを使わないようにしたらbabelなしでnode だけで実行可能になった
+
+
+コンパイルする時
+nexe shift_summary_UTF-8.js
+
+コンパイルはできるがicslモジュールで失敗する
+＞引っかかるモジュールが出てきてこれをnpm i -g で逐次グローバルインストールすれば消えた
+　　npm i -g bowser、util-deprecate、isarray、inherits、core-util-is等
+
+chromeの場所を絶対パスで指定
+＞const browser = await puppeteer.launch({
+　executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', // for compile nexe
+
+
+
+
+
+
+
+
+
+
+
+
