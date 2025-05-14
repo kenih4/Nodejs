@@ -22,6 +22,21 @@ chromeの場所を絶対パスで指定
 
 
 
+2025/5/15--------------------------------------------------
+package.jsonに"type": "module",を追記すると、
+モジュールを「const parser = require」でなく、「import clipboardy from 'clipboardy';」のように記述できる
+{
+  "type": "module",
+  "dependencies": {
+    "babel-preset-env": "^0.0.0",
+    "csv": "^6.3.11",
+    "puppeteer": "^24.7.2"
+  }
+}
+
+
+
+
 
 
 

@@ -12,6 +12,8 @@ npm install node-ical --prefix c:/module_of_Nodejs   		//icalが脆弱性のた�
 npm install dateformat --prefix c:/module_of_Nodejs
 npm install date-utils --prefix c:/module_of_Nodejs
 npm install readline-sync --prefix c:/module_of_Nodejs
+
+
 .babelrc
 
 nexeでコンパイル時、icalで引っかかるためnpm i -g bowser、util-deprecate、isarray、inherits、core-util-is等しないといけない
@@ -36,6 +38,8 @@ const fs = require('fs');	//ES6	import * as fs from "fs";
 process.on('unhandledRejection', console.dir);
 const readlineSync = require('C:\\module_of_Nodejs\\node_modules\\readline-sync');
 const { exit } = require('process');
+
+
 
 
 

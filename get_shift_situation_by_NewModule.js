@@ -1,7 +1,7 @@
 /*
 Usage:
 
-node get_shift_situation_by_NewModule.js SACLA
+node get_shift_situation_by_NewModule.js SCSS
 
 Necessary module
 npm install -g  puppeteer
@@ -11,11 +11,19 @@ npm install -g @babel/preset-env	// 以下は古い　npm install -g babel-prese
 npm install node-ical --prefix c:/module_of_Nodejs   		//icalが脆弱性のためnode-icalに変更　また、ライブラリなので、c:/module_of_Nodejs　に入れるようにした
 npm install dateformat --prefix c:/module_of_Nodejs
 npm install date-utils --prefix c:/module_of_Nodejs
-npm install -g clipboard-copy
+
+npm install clipboardy --prefix c:/module_of_Nodejs      この方法でやって他のもimportでしないと行けない模様   clipboardy@4.0.0 は ESM（ECMAScript Module）専用 になっていて、CommonJS (require()) でそのまま使うと期待通りに動作しません。Node.js が clipboardy をオブジェクトとして読み込んでいるが、write 関数が存在しないのはこのためです。
+#npm install clipboardy@3  --prefix c:/module_of_Nodejs 	ダメ		clipboardy@3.0.0 以前は CommonJS (require()) に対応しているので、ダウングレードすればこれまで通りの書き方で動作します。
+
+
 .babelrc
 
- npm list --depth=0   でインストールしたモジュールの確認
+npm list --depth=0   でローカルインストールしたモジュールの確認
+npm list -g          でグローバルインストールしたモジュールの確認
 
+特定のモジュールがインストールされているか確認
+npm list clipboardy
+npm list -g clipboardy
 
 nexeでコンパイル時、icalで引っかかるためnpm i -g bowser、util-deprecate、isarray、inherits、core-util-is等しないといけない
 */
@@ -36,14 +44,27 @@ CLIツール系（例: nodemon）		npm install -g					コマンドラインで�
 */
 
 const parser = require('C:\\module_of_Nodejs\\node_modules\\node-ical');//旧　const parser = require('ical');
+console.log("typeof(parser) = " + typeof(parser));
 const dateformat = require('C:\\module_of_Nodejs\\node_modules\\dateformat');
+console.log("typeof(dateformat) = " + typeof(dateformat));
 const fs = require('fs');	//ES6	import * as fs from "fs";
 //const {csvParseSync} = require('csv-parse/sync'); //古いconst csvParseSync = require('csv-parse/lib/sync');	//ES6	import csvParseSync from "csv-parse/lib/sync";
 //const puppeteer = require('puppeteer');
 process.on('unhandledRejection', console.dir);
-//const copy = require('clipboard-copy');   
+//const copy = require('clipboard-copy');
 
 
+//import clipboard from 'C:\\module_of_Nodejs\\node_modules\\clipboardy';ダメ
+//import clipboard from 'C:\module_of_Nodejs\node_modules\clipboardy';ダメ
+//import clipboard from 'C:\/module_of_Nodejs\/node_modules\/clipboardy';ダメ
+//const clipboard = require('C:\\module_of_Nodejs\\node_modules\\clipboardy');ダメ
+//clipboard.write("fdafs");ダメ
+// const clipboardy = require('C:\\module_of_Nodejs\\node_modules\\clipboardy');
+// clipboardy.write('Hello, world!');
+
+//import clipboardy from 'clipboardy';
+// import clipboardy from 'C:\\module_of_Nodejs\\node_modules\\clipboardy';
+// clipboardy.write('Hello, world!');
 
 
 //	--- Define 
@@ -215,7 +236,7 @@ if(process.argv[2]=="SCSS"){
 }
 
 
-		
+		clipboard.writeSync(out);
 		await writeFile(file, out);
 
 
@@ -251,14 +272,15 @@ console.log('B	次の処理へ進みます');
 			const diff_end = plan.end - setdate.getTime();
 			if (diff_sta > 0 && diff_end > 0) {
 				console.log(plan.start);
-//				console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss'));
+				console.log("typeof(dateformat) = " + typeof(dateformat));
+				//console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss'));
 //				console.log(dateformat(plan.start, 'yyyy/mm/dd+HH:MM:ss') + "\t" + dateformat(plan.end, 'yyyy/mm/dd+HH:MM:ss') + "\t" + plan.summary);
 			  return resolve(plan.summary);
 			}
 		  }
 		  resolve("");
 		} catch (err) {
-		  console.error("Error parsing ical:", err);
+		  console.error("Error@Get_summary :	", err);
 		  resolve("");
 		}
 	  }, msec);

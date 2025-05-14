@@ -10,3 +10,4 @@ node_modules
 package*
 shift_situation.txt
 sacla_watch_data.txt
+*.html
